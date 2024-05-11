@@ -68,3 +68,18 @@ class AdminItemApiDetail(APIView):
         item = Item.objects.get(id=itemId)
         item.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class CategoryApi(APIView):
+
+    def get(self, request, format=None):
+        categoryList = Category.objects.all()
+
+        serializer = CategorySerializer(categoryList, many=True)
+        return Response(serializer.data)
+
+class CategoryApiDetail(APIView):
+
+    def get(self, request,itemId):
+        item = Item.objects.filter(category=itemId)
+        serializer = ItemSerializer(item, many=True)
+        return Response(serializer.data)
