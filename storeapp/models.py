@@ -2,7 +2,7 @@ from django.db import models # import klasy models z biblioteki Django
 
 # tworzenie klasy "Category"
 class Category(models.Model):
-    id = models.IntegerField(primary_key=True) #dodanie pola numerycznego "id"
+    id = models.AutoField(primary_key=True) #dodanie pola numerycznego "id"
     name = models.CharField(max_length=25) #dodanie pola nazwy
     def __str__(self):
         return self.name
@@ -10,7 +10,7 @@ class Category(models.Model):
 
 # tworzenie klasy "Item"
 class Item(models.Model):
-    id = models.IntegerField(primary_key=True) #dodanie pola numerycznego "id"
+    id = models.AutoField(primary_key=True) #dodanie pola numerycznego "id"
     category = models.ForeignKey(Category, on_delete=models.CASCADE) #dodanie pola zawierającego referencję do kategorii
     name = models.CharField(max_length=25) #dodanie pola nazwy
     quantity = models.IntegerField(default=0) #dodanie pola z ilością produktów

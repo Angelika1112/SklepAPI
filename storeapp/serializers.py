@@ -11,4 +11,14 @@ class CategorySerializer(serializers.ModelSerializer):
 class ItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = Item
+        fields = ['id', 'category','name', 'price']
+
+class ItemDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
         fields = ['id', 'category','name','quantity', 'price','imageUrl']
+
+class AdminItemSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Item
+        fields = ['id','category','name','quantity', 'price','imageUrl']
