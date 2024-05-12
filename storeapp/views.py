@@ -16,7 +16,7 @@ from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.authentication import SessionAuthentication, BasicAuthentication
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 
 class ItemApi(APIView):
@@ -35,6 +35,8 @@ class ItemApiDetail(APIView):
         return Response(serializer.data)
 
 class AdminItemsApi(APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAdminUser]
 
     def get(self, request):
         itemList = Item.objects.all()
@@ -50,6 +52,8 @@ class AdminItemsApi(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class AdminItemApiDetail(APIView):
+    authentication_classes = [BasicAuthentication]
+    permission_classes = [IsAdminUser]
 
     def get(self, request,itemId):
         item = Item.objects.get(pk=itemId)
