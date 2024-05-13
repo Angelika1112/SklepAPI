@@ -79,7 +79,7 @@ class AdminItemApiDetail(APIView):
     def delete(self, request, itemId, format=None):
         item = Item.objects.get(id=itemId)
         item.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        return Response("Usunięto",status=status.HTTP_204_NO_CONTENT)
 
 class CategoryApi(APIView):
 
@@ -115,13 +115,29 @@ class CartApi(APIView):
     def post(self, request, cartId):
         serializer = CartItemAddSerializer(data=request.data)
         if serializer.is_valid():
-            itemNumber = int(serializer.validated_data['quantity'])
-            for i in range(itemNumber):
+            itemsNumber = int(serializer.validated_data['quantity'])
+            for i in range(itemsNumber):
                 cartItem = CartItem()
                 cartItem.cartId = cartId
                 cartItem.itemId = serializer.validated_data['itemId']
                 cartItem.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    @swagger_auto_schema(request_body=CartItemSerializer,responses={204: 'No Content', 400: 'Bad Request'})
+    def delete(self, request, cartId):
+        serializer = CartItemSerializer(data=request.data)
+        cartItemList = CartItem.objects.filter(cartId=cartId)
+        if serializer.is_valid():
+            itemsNumber = int(serializer.validated_data['quantity'])
+            itemIdToRemove = int(serializer.validated_data['itemId'])
+            for cartItem in cartItemList:
+                if itemsNumber <= 0:
+                    break
+                if cartItem.itemId == itemIdToRemove:
+                    cartItem.delete()
+                    itemsNumber-=1
+            return Response("Usunięto", status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 class CartEmptyApi(APIView):

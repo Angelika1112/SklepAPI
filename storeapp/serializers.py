@@ -33,6 +33,11 @@ class CartItemAddSerializer(serializers.Serializer):
         if data['quantity'] > itemsInShop:
             raise serializers.ValidationError("Nie ma tylu produktów w sklepie, max "+str(itemsInShop))
         return data
+
+class CartItemSerializer(serializers.Serializer):
+    itemId = serializers.IntegerField()
+    quantity = serializers.IntegerField()
+
 class CartSerializer(serializers.Serializer):
     cartId = serializers.CharField(max_length=32, min_length=36)
     itemList = serializers.ListSerializer(child=serializers.IntegerField())
