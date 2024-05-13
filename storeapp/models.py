@@ -1,4 +1,5 @@
 from django.db import models # import klasy models z biblioteki Django
+import uuid
 
 # tworzenie klasy "Category"
 class Category(models.Model):
@@ -19,4 +20,7 @@ class Item(models.Model):
     def __str__(self):
         return self.name
 
-# Create your models here.
+# tworzenie klasy "CartItem" zawierającej id koszyka oraz id produktu
+class CartItem(models.Model):
+    cartId = models.CharField(max_length=36)
+    itemId = models.IntegerField(default=0)
