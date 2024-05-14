@@ -24,3 +24,16 @@ class Item(models.Model):
 class CartItem(models.Model):
     cartId = models.CharField(max_length=36)
     itemId = models.IntegerField(default=0)
+
+# tworzenie klasy "OrderSummary" zawierającej dane podsumowania zamówienia
+class OrderSummary(models.Model):
+    id = models.AutoField(primary_key=True)
+    itemList = models.CharField(max_length=200)
+    totalPrice = models.DecimalField(max_digits = 5, decimal_places = 2)
+    firstName = models.CharField(max_length=15)
+    lastName = models.CharField(max_length=15)
+    city = models.CharField(max_length=20)
+    street = models.CharField(max_length=25)
+    homeNumber = models.CharField(max_length=10)
+    zipCode = models.CharField(max_length=6)
+    phoneNumber = models.CharField(max_length=9)

@@ -41,3 +41,12 @@ class CartItemSerializer(serializers.Serializer):
 class CartSerializer(serializers.Serializer):
     cartId = serializers.CharField(max_length=32, min_length=36)
     itemList = serializers.ListSerializer(child=serializers.IntegerField())
+
+class OrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderSummary
+        fields = '__all__'
+class OrderRequestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OrderSummary
+        fields = ('firstName', 'lastName', 'city', 'street','homeNumber', 'zipCode','phoneNumber')
