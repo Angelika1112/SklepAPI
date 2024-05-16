@@ -1,5 +1,4 @@
 from django.db import models # import klasy models z biblioteki Django
-import uuid
 
 # tworzenie klasy "Category"
 class Category(models.Model):
