@@ -19,6 +19,7 @@ from django.urls import path,include
 from drf_yasg import openapi
 from drf_yasg.views import get_schema_view as swagger_get_schema_view
 
+# Schemat swaggera
 schemaView = swagger_get_schema_view(
     openapi.Info(
         title='Sklep API',
@@ -28,6 +29,7 @@ schemaView = swagger_get_schema_view(
     public=True
 )
 
+# Endpointy API - administratora, sklepu, oraz do swaggera
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('store/',include("storeapp.urls")),

@@ -6,15 +6,18 @@ from rest_framework.views import APIView
 import uuid
 from drf_yasg.utils import swagger_auto_schema
 
+# Klasa tymczasowa zawierająca id koszuka oraz listę produktów
 class CartTempClass:
     def __init__(self, cartId, itemlist):
         self.cartId = cartId
         self.itemList = itemlist
+
+# Klasa zawierająca metody dotyczące konkretnego koszyka
 class CartApi(APIView):
 
     @swagger_auto_schema(responses={200: CartSerializer, 400: 'Bad Request'},
-                         operation_description='Operacja zwraca zawartośść wybranego koszyka.')
-    def get(self, request,cartId):
+                         operation_description='Operacja zwraca zawartość wybranego koszyka.')
+    def get(self, request,cartId):  # Metoda pobierająca zawartość konkretnego koszyka
         cartItemList = CartItem.objects.filter(cartId=cartId)
         item = CartTempClass(cartId,[cartItem.itemId for cartItem in cartItemList])
         serializer = CartSerializer(item)
@@ -23,7 +26,7 @@ class CartApi(APIView):
     @swagger_auto_schema(request_body=CartItemAddSerializer,
                          responses={200: CartItemAddSerializer, 400: 'Bad Request'},
                          operation_description='Operacja dodaje produkt do wybranego koszyka.')
-    def post(self, request, cartId):
+    def post(self, request, cartId): # Metoda dodająca produkt do konkretnego koszyka
         serializer = CartItemAddSerializer(data=request.data)
         if serializer.is_valid():
             itemsNumber = int(serializer.validated_data['quantity'])
@@ -38,7 +41,7 @@ class CartApi(APIView):
     @swagger_auto_schema(request_body=CartItemSerializer,
                          responses={204: 'No Content', 400: 'Bad Request'},
                          operation_description='Operacja usuwa produkt z wybranego koszyka.')
-    def delete(self, request, cartId):
+    def delete(self, request, cartId): # Metoda usuwająca produkt z konkretnego koszyka
         serializer = CartItemSerializer(data=request.data)
         cartItemList = CartItem.objects.filter(cartId=cartId)
         if serializer.is_valid():
@@ -53,12 +56,13 @@ class CartApi(APIView):
             return Response("Usunięto", status=status.HTTP_204_NO_CONTENT)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+# Klasa zawierająca metody dotyczące pustego koszyka
 class CartEmptyApi(APIView):
 
     @swagger_auto_schema(request_body=CartItemAddSerializer,
                          responses={200: CartItemAddSerializer, 400: 'Bad Request'},
                          operation_description='Operacja tworzy nowy koszyk i dodaje do niego produkt.')
-    def post(self, request):
+    def post(self, request): # Metoda tworząca nowy koszyk i dodająca produkt
         serializer = CartItemAddSerializer(data=request.data)
         if serializer.is_valid():
             cartId = uuid.uuid4()

@@ -6,12 +6,13 @@ from rest_framework.views import APIView
 from drf_yasg.utils import swagger_auto_schema
 import collections
 
+# Klasa zawierająca metody dotyczące składania zamówień
 class OrderApi(APIView):
 
     @swagger_auto_schema(request_body=OrderRequestSerializer,
                          responses={201: OrderSerializer, 400: 'Bad Request'},
                          operation_description='Operacja finalizuje koszyk, generując dane zakończonego zamówienia.')
-    def post(self, request, cartId):
+    def post(self, request, cartId):  # Metoda tworząca nowe zamówienia na podstawie konkretnego koszyka
         requestSerializer = OrderRequestSerializer(data=request.data)
         if requestSerializer.is_valid():
             cartItemList = CartItem.objects.filter(cartId=cartId)
@@ -45,10 +46,11 @@ class OrderApi(APIView):
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         return Response(requestSerializer.data, status=status.HTTP_400_BAD_REQUEST)
 
+# Klasa zawierająca metody dotyczące konkretnego zamówienia
 class OrderDetailApi(APIView):
     @swagger_auto_schema( responses={200: OrderSerializer, 400: 'Bad Request'},
                          operation_description='Operacja zwraca szczegóły wybranego zamówienia.')
-    def get(self, request, orderId):
+    def get(self, request, orderId):  # Metoda zwracająca szczegóły konkretnego zamówienia
         order = OrderSummary.objects.get(id=orderId)
         serializer = OrderSerializer(order)
         return Response(serializer.data)

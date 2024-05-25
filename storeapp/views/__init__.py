@@ -1,3 +1,4 @@
+# Import wszystkich używanych widoków
 from .AdminViews import *
 from .CartViews import *
 from .CategoryViews import *
